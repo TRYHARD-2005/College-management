@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0F2A4A;
+  --color-ink-2: #17223B;
+  --color-gold: #C08A28;
+  --color-gold-soft: #F1E3C6;
+  --color-gold-deep: #8F6519;
+  --color-paper: #FAF8F4;
+  --color-slate: #33404F;
+  --color-line: #E4DFD4;
+
+  --font-family-display: "Fraunces", serif;
+  --font-family-sans: "Inter", system-ui, sans-serif;
+  --font-family-mono: "IBM Plex Mono", monospace;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { background-color: #FAF8F4; font-family: var(--font-family-sans); }
+  ::selection { background: #F1E3C6; color: #0F2A4A; }
+  :focus-visible { outline: 2px solid #C08A28; outline-offset: 2px; border-radius: 2px; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="date"],
+  input[type="number"], input[type="password"], select, textarea {
+    background-color: #ffffff;
+  }
+}

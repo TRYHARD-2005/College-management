@@ -35,27 +35,15 @@ export default function Signup() {
         setLoading(true);
 
         try {
-            const res = await fetch('http://localhost:5000/api/auth/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...formData, role })
-            });
-            const data = await res.json();
+            const res = await signup({ ...formData, role });
+            const data = res.data;
 
-            if (!res.ok) {
-                throw new Error(data.message || 'Signup failed');
-            }
-
-            // On success, we get token and user
             if (data.token) {
-                // Manually trigger the context login if we can, or just save token and redirect
                 localStorage.setItem('token', data.token);
-                // We should ideally call the context `login(token)` but since the context usually just verifies, we'll reload or navigate.
-                // Or let's redirect them to login page to login normally to ensure context updates perfectly.
                 navigate('/login', { state: { message: 'Registration successful. Please log in.' } });
             }
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data?.message || err.message || 'Signup failed');
         } finally {
             setLoading(false);
         }

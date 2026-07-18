@@ -9,6 +9,7 @@ API.interceptors.request.use(config => {
 });
 
 export const login = (data) => API.post('/api/auth/login', data);
+export const signup = (data) => API.post('/api/auth/signup', data);
 
 export const getNotices = () => API.get('/api/notices');
 export const getAllNotices = () => API.get('/api/notices/all');

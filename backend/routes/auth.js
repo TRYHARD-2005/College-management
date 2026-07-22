@@ -82,30 +82,4 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Get current user's profile
-router.get('/me', require('../middleware/auth').verifyToken, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password');
-        if (!user) return res.status(404).json({ message: 'User not found' });
-
-        let profile = user.toObject();
-
-        if (user.role === 'student' && user.rollNo) {
-            const studentData = await Student.findOne({ rollNo: user.rollNo });
-            if (studentData) {
-                profile = { ...profile, ...studentData.toObject() };
-            }
-        } else if (user.role === 'faculty' && user.facultyId) {
-            const facultyData = await Faculty.findOne({ facultyId: user.facultyId });
-            if (facultyData) {
-                profile = { ...profile, ...facultyData.toObject() };
-            }
-        }
-
-        res.json(profile);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
 module.exports = router;

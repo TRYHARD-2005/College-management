@@ -1,7 +1,7 @@
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const LogoSVG = () => (
     <svg viewBox="0 0 48 32" width="22" height="15" fill="none" className="text-[#C08A28]" aria-hidden="true">
@@ -25,7 +25,6 @@ const navLinks = [
 export default function Layout() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
     const [menuOpen, setMenuOpen] = useState(false);
 
     const handleLogout = () => { logout(); navigate('/'); };
@@ -61,7 +60,6 @@ export default function Layout() {
                                         {user.role === 'admin' && (
                                             <Link to="/admin" className="px-3 py-2 text-sm font-medium text-[#C08A28] hover:text-white">Admin Panel</Link>
                                         )}
-                                        <Link to="/profile" className="px-3 py-2 text-sm font-medium text-[#C08A28] hover:text-white">Profile</Link>
                                         <button onClick={handleLogout} className="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold transition-colors bg-[#C08A28] text-[#0F2A4A] hover:bg-[#8F6519] hover:text-white">Logout</button>
                                     </>
                                 ) : (
@@ -77,40 +75,26 @@ export default function Layout() {
                     <div className="h-[3px]" style={{ background: 'linear-gradient(to right, #8F6519, #C08A28, #8F6519)' }} />
                 </div>
 
-                <AnimatePresence>
-                    {menuOpen && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            style={{ backgroundColor: '#17223B', borderTop: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' }}
-                        >
-                            <nav className="max-w-6xl mx-auto px-4 py-3 flex flex-col">
-                                {navLinks.map(l => (
-                                    <NavLink key={l.to} to={l.to} end={l.end} onClick={() => setMenuOpen(false)}
-                                        className={({ isActive }) => `px-2 py-2.5 text-sm font-medium border-b border-white/5 ${isActive ? 'text-[#C08A28]' : 'text-white/80'}`}
-                                    >{l.label}</NavLink>
-                                ))}
-                                {user ? (
-                                    <>
-                                        <Link to="/profile" onClick={() => setMenuOpen(false)} className="mt-2 text-sm font-medium text-[#C08A28] hover:text-white px-2">Profile</Link>
-                                        <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="mt-3 inline-flex justify-center items-center rounded-md px-4 py-2.5 text-sm font-semibold bg-[#C08A28] text-[#0F2A4A]">Logout</button>
-                                    </>
-                                ) : (
-                                    <Link to="/login" onClick={() => setMenuOpen(false)} className="mt-3 inline-flex justify-center items-center rounded-md px-4 py-2.5 text-sm font-semibold bg-[#C08A28] text-[#0F2A4A]">Login</Link>
-                                )}
-                            </nav>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                {menuOpen && (
+                    <div style={{ backgroundColor: '#17223B', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                        <nav className="max-w-6xl mx-auto px-4 py-3 flex flex-col">
+                            {navLinks.map(l => (
+                                <NavLink key={l.to} to={l.to} end={l.end} onClick={() => setMenuOpen(false)}
+                                    className={({ isActive }) => `px-2 py-2.5 text-sm font-medium border-b border-white/5 ${isActive ? 'text-[#C08A28]' : 'text-white/80'}`}
+                                >{l.label}</NavLink>
+                            ))}
+                            {user ? (
+                                <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="mt-3 inline-flex justify-center items-center rounded-md px-4 py-2.5 text-sm font-semibold bg-[#C08A28] text-[#0F2A4A]">Logout</button>
+                            ) : (
+                                <Link to="/login" onClick={() => setMenuOpen(false)} className="mt-3 inline-flex justify-center items-center rounded-md px-4 py-2.5 text-sm font-semibold bg-[#C08A28] text-[#0F2A4A]">Login</Link>
+                            )}
+                        </nav>
+                    </div>
+                )}
             </header>
 
             <main>
-                <AnimatePresence mode="wait">
-                    <motion.div key={location.pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
-                        <Outlet />
-                    </motion.div>
-                </AnimatePresence>
+                <Outlet />
             </main>
 
             <footer style={{ backgroundColor: '#17223B', marginTop: '4rem' }}>

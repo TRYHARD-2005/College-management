@@ -1,6 +1,8 @@
+import { motion } from 'framer-motion';
+
 export default function About() {
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
             <section className="relative overflow-hidden" style={{ backgroundColor: '#0F2A4A' }}>
                 <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
                     <p className="text-xs font-semibold uppercase text-[#C08A28] mb-3" style={{ letterSpacing: '0.2em' }}>About</p>
@@ -57,6 +59,6 @@ export default function About() {
                     </div>
                 </div>
             </section>
-        </>
+        </motion.div>
     );
 }

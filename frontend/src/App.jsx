@@ -12,6 +12,7 @@ import Notices from './pages/Notices';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import StudentProfile from './pages/StudentProfile';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminNotices from './pages/admin/Notices';
@@ -42,6 +43,11 @@ export default function App() {
           <Route path="students" element={
             <ProtectedRoute roles={['admin', 'faculty', 'student']}>
               <Students />
+            </ProtectedRoute>
+          } />
+          <Route path="profile" element={
+            <ProtectedRoute roles={['admin', 'faculty', 'student']}>
+              <StudentProfile />
             </ProtectedRoute>
           } />
           <Route path="login" element={<Login />} />
